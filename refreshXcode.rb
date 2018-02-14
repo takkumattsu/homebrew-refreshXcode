@@ -15,17 +15,16 @@ class Refreshxcode < Formula
   homepage "http://github.com/takkumattsu/homebrew-refreshXcode.git" # used by `brew home example-formula`.
 
   # The url of the archive. Prefer https (security and proxy issues):
-  url "https://gist.githubusercontent.com/TakkuMattsu/9242157/raw/700c32e42110aa0ff8217c74a4b039f8fb2cfaa8/refreshXcode.sh"
+  url "http://github.com/takkumattsu/homebrew-refreshXcode.git"
 
   # For integrity and security, we verify the hash (`openssl dgst -sha1 <FILE>`)
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
   sha256 "9dd66db58ec9c9c060f189086bf5a71fd5540df8d49dea3fa74e3242232f5468"
-  version "1.0"
+  version "1.1"
 
   def install
-    system "mv /Library/Caches/Homebrew/refreshxcode-1.0.sh refreshXcode"
-    bin.install "refreshXcode"
+    bin.install "bin/refreshXcode"
   end
 
 end

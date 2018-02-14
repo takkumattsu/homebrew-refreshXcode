@@ -1,0 +1,59 @@
+#!/bin/bash                                                                                                                                                                      
+
+# =====================================                                                                                                                                          
+# variable                                                                                                                                                                       
+
+CACHE_PATH=~/Library/Developer/Xcode/DerivedData                                                                                                                                 
+
+# =====================================                                                                                                                                          
+# function                                                                                                                                                                       
+
+# Input fucntion                                                                                                                                                                 
+function readInput()                                                                                                                                                             
+{                                                                                                                                                                                
+  echo ""                                                                                                                                                                        
+  echo -n "Delete Cache of Xcode. Are you sure ? (y/n) > "                                                                                                                       
+  read INPUT                                                                                                                                                                     
+  echo ""                                                                                                                                                                        
+
+  if [ "$INPUT" == "y" ]; then                                                                                                                                                   
+
+    isExistCacheDirectory ${CACHE_PATH}                                                                                                                                          
+    if [ $? -eq 0 ]; then                                                                                                                                                        
+      echo "Cache delete.."                                                                                                                                                      
+      echo""                                                                                                                                                                     
+      rm -r "${CACHE_PATH}"                                                                                                                                                      
+    else                                                                                                                                                                         
+      echo "Cache directory does not exist :("                                                                                                                                   
+      echo ""                                                                                                                                                                    
+      echo "Bye.."                                                                                                                                                               
+      exit                                                                                                                                                                       
+   fi                                                                                                                                                                            
+  elif [ "$INPUT" == "n" ]; then                                                                                                                                                 
+    echo "Bye.."                                                                                                                                                                 
+    exit                                                                                                                                                                         
+  else                                                                                                                                                                           
+    echo "Please \"y\" or \"n\""                                                                                                                                                 
+    readInput                                                                                                                                                                    
+  fi                                                                                                                                                                             
+}                                                                                                                                                                                
+
+# Check directory function                                                                                                                                                       
+function isExistCacheDirectory()
+{                                                                                                                                                                                
+  if [ -e "$1" ]; then                                                                                                                                                           
+    return 0                                                                                                                                                                     
+  else                                                                                                                                                                           
+    return -1                                                                                                                                                                    
+  fi                                                                                                                                                                             
+}                                                                                                                                                                                
+
+# =====================================                                                                                                                                          
+# main                                                                                                                                                                           
+
+echo "============================"                                                                                                                                              
+echo "Delete Xcocde cache script"                                                                                                                                                
+echo "============================"                                                                                                                                              
+readInput                                                                                                                                                                        
+
+echo "Done.."
