@@ -1,16 +1,19 @@
-homebrew-refreshXcode
-=====================
+# homebrew-refreshXcode
 
-Clean Xcode Cache Script.
+Xcodeのキャッシュを削除するためのスクリプト
 
+- ~/Library/Developer/Xcode/DerivedData
+- ~/Library/Developer/Xcode/iOS DeviceSupport
 
-Install and Use
-=================
+# インストール方法
 
 ```bash
-# Install
 brew tap takkumattsu/homebrew-refreshXcode
 brew install refreshXcode
-# Use
+```
+
+# 使い方
+
+```bash
 refreshXcode
 ```
