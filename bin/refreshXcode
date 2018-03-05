@@ -6,6 +6,8 @@
 DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 DIRS="$DERIVED_DATA_DIR,$DEVICE_SUPPORT_DIR"
+PROGNAME=$(basename $0)
+VERSION="1.2"
 
 # =====================================
 # function
@@ -52,9 +54,39 @@ function isExistCacheDirectory()
   fi
 }
 
+
+function usage()
+{
+  echo "Usage: $PROGNAME [OPTION]"
+  echo 
+  echo "Mandatory arguments to long options are mandatory for short options too."
+  echo
+  echo "-h, --help	show help"
+  echo "    --version	show version"
+  echo
+  exit 0
+}
+
 # =====================================
 # main
 
+for OPT in "$@"
+do
+  case "$OPT" in
+  # ヘルプメッセージ
+  '-h'|'--help' )
+    usage
+    exit 0
+    ;;
+  # バージョンメッセージ
+  '--version' )
+    echo $VERSION
+    exit 0
+    ;;
+  esac
+done
+
+# 引数ない場合
 echo "============================"
 echo "Delete Xcocde cache script"
 echo "============================"
