@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # =====================================
 # variable
 
@@ -5,7 +7,7 @@ DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 DIRS="$DERIVED_DATA_DIR,$DEVICE_SUPPORT_DIR"
 PROGNAME=$(basename $0)
-VERSION="1.3"
+VERSION="1.4"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 COLOR_YELLOW=${COLOR_ESC}33${COLOR_ESC_END}
@@ -14,6 +16,9 @@ COLOR_GREEN=${COLOR_ESC}32${COLOR_ESC_END}
 COLOR_PURPLE=${COLOR_ESC}35${COLOR_ESC_END}
 COLOR_CYAN=${COLOR_ESC}36${COLOR_ESC_END}
 COLOR_OFF=${COLOR_ESC}${COLOR_ESC_END}
+# echo -eを使うと環境に依存するため
+# 色を出力する時はこちらを利用
+ECHO=printf
 
 # =====================================
 # function
@@ -22,7 +27,7 @@ COLOR_OFF=${COLOR_ESC}${COLOR_ESC_END}
 function readInput()
 {
   echo ""
-  echo -en "${COLOR_YELLOW}Delete Cache of Xcode. Are you sure ?${COLOR_OFF} (y/n) > "
+  ${ECHO} "${COLOR_YELLOW}Delete Cache of Xcode. Are you sure ?${COLOR_OFF} (y/n) > "
   read INPUT
   echo ""
   # ,を区切り文字に
@@ -35,7 +40,7 @@ function readInput()
       if [ $? -eq -1 ]; then
         continue
       fi
-      echo -e "Delete ${dir} ..."
+      echo "Delete ${dir} ..."
       rm -rf "${dir}"
     done
   elif [ "$INPUT" == "n" ]; then
@@ -57,7 +62,7 @@ function isExistCacheDirectory()
     return 0
   else
     if [ "$2" != "false" ]; then
-      echo -e "⚠️${COLOR_YELLOW} N/A!${COLOR_OFF}	$1"
+      ${ECHO} "⚠️ ${COLOR_YELLOW} N/A!${COLOR_OFF}	$1\n"
     fi
     return -1
   fi
@@ -116,7 +121,7 @@ function showSizeMessage()
     echo "============================================================================================"
     showSize
     echo "============================================================================================"
-    echo -e "Total : ${COLOR_PURPLE}$(showTotalSize)${COLOR_OFF} 🗑"
+    ${ECHO} "Total : ${COLOR_PURPLE}$(showTotalSize)${COLOR_OFF} 🗑\n"
     return 0
 }
 function usage()
@@ -161,7 +166,7 @@ do
 done
 # 引数ない場合
 echo
-echo -e "${COLOR_CYAN}This script will clean the cache of Xcode.${COLOR_OFF}"
+${ECHO} "${COLOR_CYAN}This script will clean the cache of Xcode.${COLOR_OFF}\n"
 echo
 showSizeMessage
 readInput
