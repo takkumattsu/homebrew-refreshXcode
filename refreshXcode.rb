@@ -20,11 +20,22 @@ class Refreshxcode < Formula
   # For integrity and security, we verify the hash (`openssl dgst -sha1 <FILE>`)
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
-  sha256 "d71354594cf023f2c172ba775f45cc10b49edf41"
-  version "1.4"
+  sha256 "f0827a94231f1b19619e435d5b2fd84860e1690"
+  version "1.4.1"
 
   def install
     bin.install "bin/refreshXcode"
+  end
+  def caveats
+    <<-EOF.undent
+    Usage: refreshXcode [OPTION]
+
+    Mandatory arguments to long options are mandatory for short options too.
+
+    -h, --help      show help
+        --version   show version
+        --dry-run   display the size to be deleted
+    EOF
   end
 
 end
