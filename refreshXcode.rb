@@ -21,7 +21,7 @@ class Refreshxcode < Formula
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
   sha256 "ec505d4864d61669b48334031a4deb000df77f03"
-  version "1.2"
+  version "1.3"
 
   def install
     bin.install "bin/refreshXcode"
