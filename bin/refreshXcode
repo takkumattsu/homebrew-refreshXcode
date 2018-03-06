@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # =====================================
 # variable
 
@@ -7,7 +5,15 @@ DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 DIRS="$DERIVED_DATA_DIR,$DEVICE_SUPPORT_DIR"
 PROGNAME=$(basename $0)
-VERSION="1.2"
+VERSION="1.3"
+COLOR_ESC="\e["
+COLOR_ESC_END="m"
+COLOR_YELLOW=${COLOR_ESC}33${COLOR_ESC_END}
+COLOR_BLUE=${COLOR_ESC}34${COLOR_ESC_END}
+COLOR_GREEN=${COLOR_ESC}32${COLOR_ESC_END}
+COLOR_PURPLE=${COLOR_ESC}35${COLOR_ESC_END}
+COLOR_CYAN=${COLOR_ESC}36${COLOR_ESC_END}
+COLOR_OFF=${COLOR_ESC}${COLOR_ESC_END}
 
 # =====================================
 # function
@@ -16,7 +22,7 @@ VERSION="1.2"
 function readInput()
 {
   echo ""
-  echo -n "Delete Cache of Xcode. Are you sure ? (y/n) > "
+  echo -en "${COLOR_YELLOW}Delete Cache of Xcode. Are you sure ?${COLOR_OFF} (y/n) > "
   read INPUT
   echo ""
   # ,を区切り文字に
@@ -27,10 +33,9 @@ function readInput()
     do
       isExistCacheDirectory ${dir}
       if [ $? -eq -1 ]; then
-        echo ""
         continue
       fi
-      echo "Delete ${dir} ..."
+      echo -e "Delete ${dir} ..."
       rm -rf "${dir}"
     done
   elif [ "$INPUT" == "n" ]; then
@@ -43,18 +48,77 @@ function readInput()
 }
 
 # Check directory function
+# 第一引数: ディレクトリ
+# 第二引数: 引数にfalseで出力抑制
+# (flase以外を指定した時は表示)
 function isExistCacheDirectory()
 {
   if [ -e "$1" ]; then
     return 0
   else
-    echo "$1 does not exist :("
-    echo ""
+    if [ "$2" != "false" ]; then
+      echo -e "⚠️${COLOR_YELLOW} N/A!${COLOR_OFF}	$1"
+    fi
     return -1
   fi
 }
 
+# 削除するディレクトリのサイズ表示
+function showSize()
+{
+  # スペースが入るディレクトリ対策
+  PRE_IFS=$IFS
+  IFS=$','
+  local dirs=()
+  for dir in ${DIRS}
+  do
+    isExistCacheDirectory ${dir}
+    if [ $? -eq 0 ]; then
+      du -sh $dir
+    fi
+  done
+  IFS=$PRE_IFS
+}
 
+# トータル削除サイズ表示
+function showTotalSize()
+{
+  # スペースが入るディレクトリ対策
+  PRE_IFS=$IFS
+  IFS=$','
+  local dirs=()
+  for dir in ${DIRS}
+  do
+    isExistCacheDirectory ${dir} "false"
+    if [ $? -eq 0 ]; then
+      if [ ${#dirs[*]} -eq 0 ]; then
+        dirs=${dir}
+      else
+        dirs+=",${dir}"
+      fi
+    fi
+  done
+  if [ ${#dirs[*]} -eq 0 ]; then
+    echo "0M"
+    return 0
+  fi
+  local RESULT_LIST=$(du -shc $dirs)
+  IFS=$'\n'
+  for last in $RESULT_LIST
+  do :
+  done
+  IFS=$PRE_IFS
+  echo $last | cut -d" " -f 1
+}
+
+function showSizeMessage()
+{
+    echo "============================================================================================"
+    showSize
+    echo "============================================================================================"
+    echo -e "Total : ${COLOR_PURPLE}$(showTotalSize)${COLOR_OFF} 🗑"
+    return 0
+}
 function usage()
 {
   echo "Usage: $PROGNAME [OPTION]"
@@ -63,13 +127,13 @@ function usage()
   echo
   echo "-h, --help	show help"
   echo "    --version	show version"
+  echo "    --dry-run	display the size to be deleted"
   echo
   exit 0
 }
 
 # =====================================
 # main
-
 for OPT in "$@"
 do
   case "$OPT" in
@@ -83,13 +147,24 @@ do
     echo $VERSION
     exit 0
     ;;
+  # 削除されるサイズ表示
+  '--dry-run' )
+    echo "Display size to be deleted."
+    showSizeMessage
+    exit 0
+    ;;
+  * )
+    usage
+    exit 0
+    ;;
   esac
 done
-
 # 引数ない場合
-echo "============================"
-echo "Delete Xcocde cache script"
-echo "============================"
+echo
+echo -e "${COLOR_CYAN}This script will clean the cache of Xcode.${COLOR_OFF}"
+echo
+showSizeMessage
 readInput
 
+echo
 echo "Done.."
