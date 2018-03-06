@@ -1,19 +1,24 @@
-# homebrew-refreshXcode
+# refreshXcode
 
-Xcodeのキャッシュを削除するためのスクリプト
+refreshXcode is a script to delete Xcode's cache.
 
 - ~/Library/Developer/Xcode/DerivedData
 - ~/Library/Developer/Xcode/iOS DeviceSupport
 
-# インストール方法
+# USAGE
+
+```bash
+# Use
+refreshXcode
+# dry-run
+refreshXcode --dry-run
+# help
+refreshXcode -h
+```
+
+# INSTALL
 
 ```bash
 brew tap takkumattsu/homebrew-refreshXcode
 brew install refreshXcode
-```
-
-# 使い方
-
-```bash
-refreshXcode
 ```
