@@ -5,17 +5,21 @@
 
 DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
-DIRS="$DERIVED_DATA_DIR,$DEVICE_SUPPORT_DIR"
+DIRS="$DERIVED_DATA_DIR"
 PROGNAME=$(basename $0)
-VERSION="1.4.3"
+VERSION="1.5"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
+WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
+COLOR_GRAY="${COLOR_ESC}30;1${COLOR_ESC_END}"
+COLOR_WHITE=${COLOR_ESC}31${COLOR_ESC_END}
 COLOR_YELLOW=${COLOR_ESC}33${COLOR_ESC_END}
 COLOR_BLUE=${COLOR_ESC}34${COLOR_ESC_END}
 COLOR_GREEN=${COLOR_ESC}32${COLOR_ESC_END}
 COLOR_PURPLE=${COLOR_ESC}35${COLOR_ESC_END}
 COLOR_CYAN=${COLOR_ESC}36${COLOR_ESC_END}
 COLOR_OFF=${COLOR_ESC}${COLOR_ESC_END}
+IS_CONTAIN_DEVICE_SUPPORT=false
 # echo -eを使うと環境に依存するため
 # 色を出力する時はこちらを利用
 ECHO=printf
@@ -128,8 +132,11 @@ function usage()
 {
   echo "Usage: $PROGNAME [OPTION]"
   echo 
-  echo "Mandatory arguments to long options are mandatory for short options too."
+  ${ECHO} "The default behavior is to delete ${COLOR_CYAN}~/Library/Developer/Xcode/DerivedData${COLOR_OFF} .\n"
+  echo "You can add directories to be deleted with the options."
   echo
+  echo "OPTION"
+  ${ECHO} %b "-s		If you add -s option, add ${COLOR_CYAN}~/Library/Developer/Xcode/iOS DeviceSupport${COLOR_OFF} to be deleted.\n"
   echo "-h, --help	show help"
   echo "    --version	show version"
   echo "-n, --dry-run	display the size to be deleted"
@@ -157,8 +164,15 @@ do
     echo
     ${ECHO} "${COLOR_CYAN}Display size to be deleted.${COLOR_OFF}\n"
     echo
+    ## dry-runの時はすべてのディレクトリを追加
+    DIRS+=",${DEVICE_SUPPORT_DIR}"
     showSizeMessage
     exit 0
+    ;;
+  # iOS DeviceSupportを削除対象に追加
+  '-s' )
+    DIRS+=",${DEVICE_SUPPORT_DIR}"
+    IS_CONTAIN_DEVICE_SUPPORT=true
     ;;
   * )
     usage
@@ -166,9 +180,13 @@ do
     ;;
   esac
 done
-# 引数ない場合
+# メイン処理
 echo
-${ECHO} "${COLOR_CYAN}This script will clean the cache of Xcode.${COLOR_OFF}\n"
+${ECHO} "${WHITE_UNDER}This script will clean the cache of Xcode.${COLOR_OFF}\n"
+if ! $IS_CONTAIN_DEVICE_SUPPORT ; then
+  echo
+  ${ECHO} %b "✏️${COLOR_GRAY} If you add ${COLOR_OFF}-s${COLOR_GRAY} option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted.${COLOR_OFF}\n"
+fi
 echo
 showSizeMessage
 readInput
