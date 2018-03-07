@@ -7,7 +7,7 @@ DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 DIRS="$DERIVED_DATA_DIR,$DEVICE_SUPPORT_DIR"
 PROGNAME=$(basename $0)
-VERSION="1.4.2"
+VERSION="1.4.3"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 COLOR_YELLOW=${COLOR_ESC}33${COLOR_ESC_END}
@@ -132,7 +132,7 @@ function usage()
   echo
   echo "-h, --help	show help"
   echo "    --version	show version"
-  echo "    --dry-run	display the size to be deleted"
+  echo "-n, --dry-run	display the size to be deleted"
   echo
   exit 0
 }
@@ -153,8 +153,10 @@ do
     exit 0
     ;;
   # 削除されるサイズ表示
-  '--dry-run' )
-    echo "Display size to be deleted."
+  '-n'|'--dry-run' )
+    echo
+    ${ECHO} "${COLOR_CYAN}Display size to be deleted.${COLOR_OFF}\n"
+    echo
     showSizeMessage
     exit 0
     ;;
