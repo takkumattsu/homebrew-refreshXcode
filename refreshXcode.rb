@@ -20,8 +20,8 @@ class Refreshxcode < Formula
   # For integrity and security, we verify the hash (`openssl dgst -sha1 <FILE>`)
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
-  sha256 "12602c2f9f9aefd25efb293e5349a8fc3325821a"
-  version "1.4.3"
+  sha256 "b70fcf0e955821a6c1f64c203c7c5517d246ecea"
+  version "1.5"
 
   def install
     bin.install "bin/refreshXcode"
@@ -30,8 +30,11 @@ class Refreshxcode < Formula
     <<~EOF
     Usage: refreshXcode [OPTION]
 
-    Mandatory arguments to long options are mandatory for short options too.
+    The default behavior is to delete ~/Library/Developer/Xcode/DerivedData.
+    You can add directories to be deleted with the options.
 
+    OPTION
+    -s		If you add -s option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted.
     -h, --help      show help
         --version   show version
     -n, --dry-run   display the size to be deleted
