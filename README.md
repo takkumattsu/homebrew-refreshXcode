@@ -5,6 +5,8 @@ refreshXcode is a script to delete Xcode's cache.
 - ~/Library/Developer/Xcode/DerivedData
 - ~/Library/Developer/Xcode/iOS DeviceSupport
 
+![cap](https://user-images.githubusercontent.com/3356758/37102109-76ed35b8-226a-11e8-9609-9ca69bb796f8.gif)
+
 # USAGE
 
 ```bash
