@@ -7,7 +7,7 @@ DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 DIRS="$DERIVED_DATA_DIR"
 PROGNAME=$(basename $0)
-VERSION="1.5.1"
+VERSION="1.5.2"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
@@ -120,13 +120,20 @@ function showTotalSize()
   echo $last | cut -d" " -f 1
 }
 
+# サイズを表示
+# 返り値が1の場合は0Mだった時
 function showSizeMessage()
 {
-    echo "============================================================================================"
-    showSize
-    echo "============================================================================================"
-    ${ECHO} "Total : ${COLOR_PURPLE}$(showTotalSize)${COLOR_OFF} 🗑\n"
+  local TOTAL=$(showTotalSize)
+  echo "============================================================================================"
+  showSize
+  echo "============================================================================================"
+  ${ECHO} "Total : ${COLOR_PURPLE}${TOTAL}${COLOR_OFF} 🗑\n"
+  if [ ${TOTAL} == "0M" ]; then
+    return 1
+  else
     return 0
+  fi
 }
 function usage()
 {
@@ -189,6 +196,12 @@ if ! $IS_CONTAIN_DEVICE_SUPPORT ; then
 fi
 echo
 showSizeMessage
+if [ $? -eq 1 ]; then
+  echo
+  echo "You do not have to run this script.👌"
+  echo
+  exit 0
+fi
 readInput
 
 echo
