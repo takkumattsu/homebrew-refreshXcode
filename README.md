@@ -8,10 +8,12 @@ refreshXcode is a script to delete Xcode's cache.
 # USAGE
 
 ```bash
-# Use
+# The default behavior is to delete ~/Library/Developer/Xcode/DerivedData.
 refreshXcode
+# If you add -s option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted. 
+refreshXcode -s 
 # dry-run
-refreshXcode --dry-run
+refreshXcode -n
 # help
 refreshXcode -h
 ```
