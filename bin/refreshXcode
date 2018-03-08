@@ -7,7 +7,7 @@ DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 DIRS="$DERIVED_DATA_DIR"
 PROGNAME=$(basename $0)
-VERSION="1.5.2"
+VERSION="1.5.3"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
@@ -169,7 +169,7 @@ do
   # 削除されるサイズ表示
   '-n'|'--dry-run' )
     echo
-    ${ECHO} "${COLOR_CYAN}Display size to be deleted.${COLOR_OFF}\n"
+    ${ECHO} "${WHITE_UNDER}Display size to be deleted.${COLOR_OFF}\n"
     echo
     ## dry-runの時はすべてのディレクトリを追加
     DIRS+=",${DEVICE_SUPPORT_DIR}"
