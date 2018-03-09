@@ -5,9 +5,10 @@
 
 DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
+ARCHIVE_DIR=~/Library/Developer/Xcode/Archives
 DIRS="$DERIVED_DATA_DIR"
 PROGNAME=$(basename $0)
-VERSION="1.5.3"
+VERSION="1.6"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
@@ -20,6 +21,7 @@ COLOR_PURPLE=${COLOR_ESC}35${COLOR_ESC_END}
 COLOR_CYAN=${COLOR_ESC}36${COLOR_ESC_END}
 COLOR_OFF=${COLOR_ESC}${COLOR_ESC_END}
 IS_CONTAIN_DEVICE_SUPPORT=false
+IS_CONTAIN_ARCHIVE=false
 # echo -eを使うと環境に依存するため
 # 色を出力する時はこちらを利用
 ECHO=printf
@@ -144,6 +146,7 @@ function usage()
   echo
   echo "OPTION"
   ${ECHO} %b "-s		If you add -s option, add ${COLOR_CYAN}~/Library/Developer/Xcode/iOS DeviceSupport${COLOR_OFF} to be deleted.\n"
+  ${ECHO} %b "-b		If you add -b option, add ${COLOR_CYAN}~/Library/Developer/Xcode/Archives${COLOR_OFF} to be deleted.\n"
   echo "-h, --help	show help"
   echo "    --version	show version"
   echo "-n, --dry-run	display the size to be deleted"
@@ -173,6 +176,7 @@ do
     echo
     ## dry-runの時はすべてのディレクトリを追加
     DIRS+=",${DEVICE_SUPPORT_DIR}"
+    DIRS+=",${ARCHIVE_DIR}"
     showSizeMessage
     exit 0
     ;;
@@ -180,6 +184,18 @@ do
   '-s' )
     DIRS+=",${DEVICE_SUPPORT_DIR}"
     IS_CONTAIN_DEVICE_SUPPORT=true
+    ;;
+  # Archivesを削除対象に追加
+  '-b' )
+    DIRS+=",${ARCHIVE_DIR}"
+    IS_CONTAIN_ARCHIVE=true
+    ;;
+  # sとb(ちょっといけてないけど)
+  '-sb' | '-bs' )
+    DIRS+=",${DEVICE_SUPPORT_DIR}"
+    IS_CONTAIN_DEVICE_SUPPORT=true
+    DIRS+=",${ARCHIVE_DIR}"
+    IS_CONTAIN_ARCHIVE=true
     ;;
   * )
     usage
@@ -193,6 +209,10 @@ ${ECHO} "${WHITE_UNDER}This script will clean the cache of Xcode.${COLOR_OFF}\n"
 if ! $IS_CONTAIN_DEVICE_SUPPORT ; then
   echo
   ${ECHO} %b "✏️${COLOR_GRAY} If you add ${COLOR_OFF}-s${COLOR_GRAY} option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted.${COLOR_OFF}\n"
+fi
+if ! $IS_CONTAIN_ARCHIVE ; then
+  echo
+  ${ECHO} %b "✏️${COLOR_GRAY} If you add ${COLOR_OFF}-b${COLOR_GRAY} option, add ~/Library/Developer/Xcode/Archives to be deleted.${COLOR_OFF}\n"
 fi
 echo
 showSizeMessage

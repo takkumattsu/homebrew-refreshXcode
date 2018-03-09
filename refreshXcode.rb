@@ -20,8 +20,8 @@ class Refreshxcode < Formula
   # For integrity and security, we verify the hash (`openssl dgst -sha1 <FILE>`)
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
-  sha256 "5f8db4876e51e60a7c5ae1297e99e48f8e4d903e"
-  version "1.5.3"
+  sha256 "8f6cc06dbdc7383dbceab1b2e17501cdbf2a1edd"
+  version "1.6"
 
   def install
     bin.install "bin/refreshXcode"
@@ -35,6 +35,7 @@ class Refreshxcode < Formula
 
     OPTION
     -s		If you add -s option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted.
+    -b		If you add -b option, add ~/Library/Developer/Xcode/Archives to be deleted.
     -h, --help      show help
         --version   show version
     -n, --dry-run   display the size to be deleted
