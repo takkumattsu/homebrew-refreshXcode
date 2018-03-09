@@ -20,8 +20,8 @@ class Refreshxcode < Formula
   # For integrity and security, we verify the hash (`openssl dgst -sha1 <FILE>`)
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
-  sha256 "8f6cc06dbdc7383dbceab1b2e17501cdbf2a1edd"
-  version "1.6"
+  sha256 "18b93b06cc00afdb9ce9712768c4acb46b04d4e5"
+  version "1.7"
 
   def install
     bin.install "bin/refreshXcode"
@@ -30,12 +30,25 @@ class Refreshxcode < Formula
     <<~EOF
     Usage: refreshXcode [OPTION]
 
-    The default behavior is to delete ~/Library/Developer/Xcode/DerivedData.
-    You can add directories to be deleted with the options.
-
+    The default behavior is to delete the following directories.
+     ~/Library/Developer/Xcode/DerivedData
+     ~/Library/Developer/Xcode/iOS DeviceSupport
+     ~/Library/Developer/Xcode/Archives
+    
+    You can also delete them individually by specifying options.
+    
+    e.g.
+    
+    Only ~/Library/Developer/Xcode/DerivedData
+    $ refreshXcode -s
+    
+    ~/Library/Developer/Xcode/DerivedData and ~/Library/Developer/Xcode/Archives
+    $ refreshXcode -sb
+    
     OPTION
-    -s		If you add -s option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted.
-    -b		If you add -b option, add ~/Library/Developer/Xcode/Archives to be deleted.
+    -d		If you add -d option, you will delete ~/Library/Developer/Xcode/DerivedData.
+    -s		If you add -s option, you will delete ~/Library/Developer/Xcode/iOS DeviceSupport.
+    -b		If you add -b option, you will delete ~/Library/Developer/Xcode/Archives.
     -h, --help      show help
         --version   show version
     -n, --dry-run   display the size to be deleted
