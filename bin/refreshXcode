@@ -6,9 +6,9 @@
 DERIVED_DATA_DIR=~/Library/Developer/Xcode/DerivedData
 DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 ARCHIVE_DIR=~/Library/Developer/Xcode/Archives
-DIRS="$DERIVED_DATA_DIR"
+DIRS="${DERIVED_DATA_DIR},${DEVICE_SUPPORT_DIR},${ARCHIVE_DIR}"
 PROGNAME=$(basename $0)
-VERSION="1.6"
+VERSION="1.7"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
@@ -20,8 +20,9 @@ COLOR_GREEN=${COLOR_ESC}32${COLOR_ESC_END}
 COLOR_PURPLE=${COLOR_ESC}35${COLOR_ESC_END}
 COLOR_CYAN=${COLOR_ESC}36${COLOR_ESC_END}
 COLOR_OFF=${COLOR_ESC}${COLOR_ESC_END}
-IS_CONTAIN_DEVICE_SUPPORT=false
-IS_CONTAIN_ARCHIVE=false
+IS_CONTAIN_DEVICE_SUPPORT=true
+IS_CONTAIN_ARCHIVE=true
+IS_CONTAIN_DERIVED_DIR=true
 # echo -eを使うと環境に依存するため
 # 色を出力する時はこちらを利用
 ECHO=printf
@@ -141,12 +142,25 @@ function usage()
 {
   echo "Usage: $PROGNAME [OPTION]"
   echo 
-  ${ECHO} "The default behavior is to delete ${COLOR_CYAN}~/Library/Developer/Xcode/DerivedData${COLOR_OFF} .\n"
-  echo "You can add directories to be deleted with the options."
+  echo "The default behavior is to delete the following directories."
+  ${ECHO} " ${COLOR_CYAN}~/Library/Developer/Xcode/DerivedData${COLOR_OFF}\n"
+  ${ECHO} " ${COLOR_CYAN}~/Library/Developer/Xcode/iOS DeviceSupport${COLOR_OFF}\n"
+  ${ECHO} " ${COLOR_CYAN}~/Library/Developer/Xcode/Archives${COLOR_OFF}\n"
+  echo
+  echo "You can also delete them individually by specifying options."
+  echo
+  echo "e.g."
+  echo
+  echo "Only ~/Library/Developer/Xcode/DerivedData"
+  ${ECHO} "${COLOR_GREEN}$ refreshXcode -s${COLOR_OFF}\n"
+  echo
+  echo "~/Library/Developer/Xcode/DerivedData and ~/Library/Developer/Xcode/Archives"
+  ${ECHO} "${COLOR_GREEN}$ refreshXcode -sb${COLOR_OFF}\n"
   echo
   echo "OPTION"
-  ${ECHO} %b "-s		If you add -s option, add ${COLOR_CYAN}~/Library/Developer/Xcode/iOS DeviceSupport${COLOR_OFF} to be deleted.\n"
-  ${ECHO} %b "-b		If you add -b option, add ${COLOR_CYAN}~/Library/Developer/Xcode/Archives${COLOR_OFF} to be deleted.\n"
+  ${ECHO} %b "-d		If you add -d option, you will delete ${COLOR_CYAN}~/Library/Developer/Xcode/DerivedData${COLOR_OFF}.\n"
+  ${ECHO} %b "-s		If you add -s option, you will delete ${COLOR_CYAN}~/Library/Developer/Xcode/iOS DeviceSupport${COLOR_OFF}.\n"
+  ${ECHO} %b "-b		If you add -b option, you will delete ${COLOR_CYAN}~/Library/Developer/Xcode/Archives${COLOR_OFF}.\n"
   echo "-h, --help	show help"
   echo "    --version	show version"
   echo "-n, --dry-run	display the size to be deleted"
@@ -174,28 +188,48 @@ do
     echo
     ${ECHO} "${WHITE_UNDER}Display size to be deleted.${COLOR_OFF}\n"
     echo
-    ## dry-runの時はすべてのディレクトリを追加
-    DIRS+=",${DEVICE_SUPPORT_DIR}"
-    DIRS+=",${ARCHIVE_DIR}"
     showSizeMessage
     exit 0
     ;;
   # iOS DeviceSupportを削除対象に追加
   '-s' )
-    DIRS+=",${DEVICE_SUPPORT_DIR}"
-    IS_CONTAIN_DEVICE_SUPPORT=true
+    DIRS="${DEVICE_SUPPORT_DIR}"
+    IS_CONTAIN_ARCHIVE=false
+    IS_CONTAIN_DERIVED_DIR=false
     ;;
   # Archivesを削除対象に追加
   '-b' )
-    DIRS+=",${ARCHIVE_DIR}"
-    IS_CONTAIN_ARCHIVE=true
+    DIRS="${ARCHIVE_DIR}"
+    IS_CONTAIN_DEVICE_SUPPORT=false
+    IS_CONTAIN_DERIVED_DIR=false
+    ;;
+  # Derivedwo削除対象に追加
+  '-d' )
+    DIRS="${DERIVED_DATA_DIR}"
+    IS_CONTAIN_DEVICE_SUPPORT=false
+    IS_CONTAIN_ARCHIVE=false
     ;;
   # sとb(ちょっといけてないけど)
   '-sb' | '-bs' )
-    DIRS+=",${DEVICE_SUPPORT_DIR}"
-    IS_CONTAIN_DEVICE_SUPPORT=true
+    DIRS="${DEVICE_SUPPORT_DIR}"
     DIRS+=",${ARCHIVE_DIR}"
-    IS_CONTAIN_ARCHIVE=true
+    IS_CONTAIN_DERIVED_DIR=false
+    ;;
+  # sとd(ちょっといけてないけど)
+  '-sd' | '-ds' )
+    DIRS="${DEVICE_SUPPORT_DIR}"
+    DIRS+=",${DERIVED_DATA_DIR}"
+    IS_CONTAIN_ARCHIVE=false
+    ;;
+  # bとd(ちょっといけてないけど)
+  '-bd' | '-db' )
+    DIRS="${ARCHIVE_DIR}"
+    DIRS+=",${DERIVED_DATA_DIR}"
+    IS_CONTAIN_DEVICE_SUPPORT=false
+    ;;
+  # sとbとd(ちょっといけてないけど)
+  '-sbd' | '-sdb' | '-dsb' | '-dbs' | '-bsd' | '-bds' )
+    # 全指定と同じ
     ;;
   * )
     usage
@@ -206,13 +240,15 @@ done
 # メイン処理
 echo
 ${ECHO} "${WHITE_UNDER}This script will clean the cache of Xcode.${COLOR_OFF}\n"
+echo
 if ! $IS_CONTAIN_DEVICE_SUPPORT ; then
-  echo
   ${ECHO} %b "✏️${COLOR_GRAY} If you add ${COLOR_OFF}-s${COLOR_GRAY} option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted.${COLOR_OFF}\n"
 fi
 if ! $IS_CONTAIN_ARCHIVE ; then
-  echo
   ${ECHO} %b "✏️${COLOR_GRAY} If you add ${COLOR_OFF}-b${COLOR_GRAY} option, add ~/Library/Developer/Xcode/Archives to be deleted.${COLOR_OFF}\n"
+fi
+if ! $IS_CONTAIN_DERIVED_DIR ; then
+  ${ECHO} %b "✏️${COLOR_GRAY} If you add ${COLOR_OFF}-d${COLOR_GRAY} option, add ~/Library/Developer/Xcode/DerivedData to be deleted.${COLOR_OFF}\n"
 fi
 echo
 showSizeMessage
