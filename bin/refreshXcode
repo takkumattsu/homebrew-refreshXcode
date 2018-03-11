@@ -8,7 +8,7 @@ DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 ARCHIVE_DIR=~/Library/Developer/Xcode/Archives
 DIRS="${DERIVED_DATA_DIR},${DEVICE_SUPPORT_DIR},${ARCHIVE_DIR}"
 PROGNAME=$(basename $0)
-VERSION="1.7"
+VERSION="1.7.1"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
@@ -249,6 +249,11 @@ if ! $IS_CONTAIN_ARCHIVE ; then
 fi
 if ! $IS_CONTAIN_DERIVED_DIR ; then
   ${ECHO} %b "✏️${COLOR_GRAY} If you add ${COLOR_OFF}-d${COLOR_GRAY} option, add ~/Library/Developer/Xcode/DerivedData to be deleted.${COLOR_OFF}\n"
+fi
+if $IS_CONTAIN_DEVICE_SUPPORT && $IS_CONTAIN_ARCHIVE && $IS_CONTAIN_DERIVED_DIR; then
+  ${ECHO} "✏️${COLOR_GRAY} If you want to delete individually please specify option.${COLOR_OFF}\n"
+  echo
+  ${ECHO} "${COLOR_GRAY}$ refreshXcode [-sbd]${COLOR_OFF}\n"
 fi
 echo
 showSizeMessage
