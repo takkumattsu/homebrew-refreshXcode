@@ -8,7 +8,7 @@ DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 ARCHIVE_DIR=~/Library/Developer/Xcode/Archives
 DIRS="${DERIVED_DATA_DIR},${DEVICE_SUPPORT_DIR},${ARCHIVE_DIR}"
 PROGNAME=$(basename $0)
-VERSION="1.7.1"
+VERSION="1.7.2"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
@@ -69,7 +69,7 @@ function isExistCacheDirectory()
     return 0
   else
     if [ "$2" != "false" ]; then
-      ${ECHO} "⚠️ ${COLOR_YELLOW} N/A${COLOR_OFF}	$1\n"
+      ${ECHO} "${COLOR_YELLOW}N/A${COLOR_OFF}	$1\n"
     fi
     return -1
   fi

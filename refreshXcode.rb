@@ -20,8 +20,8 @@ class Refreshxcode < Formula
   # For integrity and security, we verify the hash (`openssl dgst -sha1 <FILE>`)
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
-  sha256 "0d8a8ab7c361548dd62ae024beec6c0cdf630bd1"
-  version "1.7.1"
+  sha256 "4581c05dbce7700f64f2cb2faf0acbb21cd92de0"
+  version "1.7.2"
 
   def install
     bin.install "bin/refreshXcode"
