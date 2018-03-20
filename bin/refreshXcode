@@ -8,7 +8,7 @@ DEVICE_SUPPORT_DIR=~/Library/Developer/Xcode/iOS\ DeviceSupport
 ARCHIVE_DIR=~/Library/Developer/Xcode/Archives
 DIRS="${DERIVED_DATA_DIR},${DEVICE_SUPPORT_DIR},${ARCHIVE_DIR}"
 PROGNAME=$(basename $0)
-VERSION="1.7.2"
+VERSION="1.7.3"
 COLOR_ESC="\e["
 COLOR_ESC_END="m"
 WHITE_UNDER="${COLOR_ESC}31;;4${COLOR_ESC_END}"
@@ -157,6 +157,14 @@ function usage()
   echo "~/Library/Developer/Xcode/DerivedData and ~/Library/Developer/Xcode/Archives"
   ${ECHO} "${COLOR_GREEN}$ refreshXcode -sb${COLOR_OFF}\n"
   echo
+  ## オプション表示
+  usage_option
+  echo
+  exit 0
+}
+
+function usage_option()
+{
   echo "OPTION"
   ${ECHO} %b "-d		If you add -d option, you will delete ${COLOR_CYAN}~/Library/Developer/Xcode/DerivedData${COLOR_OFF}.\n"
   ${ECHO} %b "-s		If you add -s option, you will delete ${COLOR_CYAN}~/Library/Developer/Xcode/iOS DeviceSupport${COLOR_OFF}.\n"
@@ -164,8 +172,6 @@ function usage()
   echo "-h, --help	show help"
   echo "    --version	show version"
   echo "-n, --dry-run	display the size to be deleted"
-  echo
-  exit 0
 }
 
 # =====================================
@@ -189,6 +195,10 @@ do
     ${ECHO} "${WHITE_UNDER}Display size to be deleted.${COLOR_OFF}\n"
     echo
     showSizeMessage
+    echo
+    echo "🔖  For your Information"
+    echo
+    usage_option
     exit 0
     ;;
   # iOS DeviceSupportを削除対象に追加
