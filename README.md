@@ -45,26 +45,26 @@ refreshXcode --help
 
 ## You can also delete them individually by specifying options.
 
-### If you add -d option, add ~/Library/Developer/Xcode/DerivedData to be deleted.
+### If you add -D option, add ~/Library/Developer/Xcode/DerivedData to be deleted.
 ```bash
 # Delete ~/Library/Developer/Xcode/DerivedData
-refreshXcode -d
+refreshXcode -D
 ```
 
-### If you add -s option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted. 
+### If you add -i option, add ~/Library/Developer/Xcode/iOS DeviceSupport to be deleted. 
 ```bash
 # Delete ~/Library/Developer/Xcode/iOS DeviceSupport
-refreshXcode -s 
+refreshXcode -i
 ```
-### If you add -b option, add ~/Library/Developer/Xcode/Archives to be deleted. 
+### If you add -A option, add ~/Library/Developer/Xcode/Archives to be deleted. 
 
 ```bash
 # Delete ~/Library/Developer/Xcode/Archives
-refreshXcode -b
+refreshXcode -A
 ```
 ### Multiple options can also be specified.
 
 ```bash
 # Delete ~/Library/Developer/Xcode/iOS DeviceSupport and ~/Library/Developer/Xcode/Archives
-refreshXcode -sb
+refreshXcode -iA
 ```

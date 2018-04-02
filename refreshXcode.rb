@@ -20,8 +20,8 @@ class Refreshxcode < Formula
   # For integrity and security, we verify the hash (`openssl dgst -sha1 <FILE>`)
   # You may also use sha256 if the software uses sha256 on their homepage.
   # Leave it empty at first and `brew install` will tell you the expected.
-  sha256 "ced6d2af27d26027037bc185de8bde5cdaf360f4"
-  version "1.7.3"
+  sha256 "5642bd054e706eebfb284e3f82211fc088b63dda"
+  version "1.7.4"
 
   def install
     bin.install "bin/refreshXcode"
@@ -40,15 +40,15 @@ class Refreshxcode < Formula
     e.g.
     
     Only ~/Library/Developer/Xcode/DerivedData
-    $ refreshXcode -s
+    $ refreshXcode -D
     
     ~/Library/Developer/Xcode/DerivedData and ~/Library/Developer/Xcode/Archives
-    $ refreshXcode -sb
+    $ refreshXcode -DA
     
     OPTION
-    -d		If you add -d option, you will delete ~/Library/Developer/Xcode/DerivedData.
-    -s		If you add -s option, you will delete ~/Library/Developer/Xcode/iOS DeviceSupport.
-    -b		If you add -b option, you will delete ~/Library/Developer/Xcode/Archives.
+    -D		If you add -D option, you will delete ~/Library/Developer/Xcode/DerivedData.
+    -i		If you add -i option, you will delete ~/Library/Developer/Xcode/iOS DeviceSupport.
+    -A		If you add -A option, you will delete ~/Library/Developer/Xcode/Archives.
     -h, --help      show help
         --version   show version
     -n, --dry-run   display the size to be deleted
